@@ -1,10 +1,10 @@
 /*
     *  ViewController.swift
-    *  CalculatorApp_Part_03
-    *  Created by Raj Kumar Shahu on 2020-10-14
+    *  CalculatorApp_Part_02
+    *  Created by Raj Kumar Shahu on 2020-10-02.
     *  StudentID: 300783746
     *  Description:
-            * This is the third and final part of the Calculator App assignment.
+            * This is the second part of the Calculator App assignment.
             * In this part, logic is implemented to make the Calculator App functioning.
  */
 
@@ -28,6 +28,7 @@ class ViewController: UIViewController
 
     @IBAction func OnNumberButton_Press(_ sender: UIButton)
     {
+                
         switch sender.titleLabel?.text!
         {
         case "C":
@@ -44,6 +45,9 @@ class ViewController: UIViewController
             {
                 ResultLabel.text! = "0"
             }
+        case "π":
+            ResultLabel.text!.removeLast()
+            ResultLabel.text! = String(Double.pi)
         case ".":
             if(!ResultLabel.text!.contains(".")) // Gets concatenated to decimal
             {
@@ -65,6 +69,7 @@ class ViewController: UIViewController
                 }
             }
         default:
+            print("default")
             // This gets executed when we click numbers
             if(resetInputLabel || ResultLabel.text! == "0")
             {
@@ -86,43 +91,47 @@ class ViewController: UIViewController
     @IBAction func OnOperatorButton_Press(_ sender: UIButton)
     {
         // when operator is clicked this gets executed
-        clickedOperator = sender.titleLabel!.text!
+            clickedOperator = sender.titleLabel!.text!
+        print(clickedOperator)
+            
+            let singleOperandOperator = ["=", "sin", "cos", "tan", "√"];
+            
         
-    
-        if(activeOperator == "")
-        {
-            activeOperator = clickedOperator
-            resetInputLabel = true;
-        }
-        
-        if(operationResult != 0.0) {
-            return // exit the code block
-        }
-        
-        
-        if(leftOperand != 0.0)
-        {
-            rightOperand = Double(ResultLabel.text!)!
-        }
-        else
-        {
-            leftOperand = Double(ResultLabel.text!)!
-        }
-        
-        if(rightOperand == 0.0 && clickedOperator != "=")
-        {
-            return // exit the block if rightOperand is zero. If currently currentClicked operator is "=" we will not exit the function but we will show operationResult
-        }
-        
-        
-        // this part of the code gets executed
-                // only if we have both left and right operands and active Operator
-        
-        // this is special case for "%" computation
-        if(clickedOperator == "%")
-        {
-            rightOperand = rightOperand / 100
-        }
+            if(activeOperator == "")
+            {
+                activeOperator = clickedOperator
+                resetInputLabel = true;
+            }
+            
+            if(operationResult != 0.0) {
+                return // exit the code block
+            }
+            
+            
+            if(leftOperand != 0.0)
+            {
+                rightOperand = Double(ResultLabel.text!)!
+            }
+            else
+            {
+                print(ResultLabel.text!)
+                leftOperand = Double(ResultLabel.text!)!
+            }
+            
+            if(rightOperand == 0.0 && !singleOperandOperator.contains(clickedOperator))
+            {
+                return // exit the block if rightOperand is zero. If currently currentClicked operator is "=" we will not exit the function but we will show operationResult
+            }
+            
+            
+            // this part of the code gets executed
+                    // only if we have both left and right operands and active Operator
+            
+            // this is special case for "%" computation
+            if(clickedOperator == "%")
+            {
+                rightOperand = rightOperand / 100
+            }
         
         switch activeOperator
         {
@@ -136,6 +145,14 @@ class ViewController: UIViewController
                 operationResult = leftOperand / rightOperand
             case "=":
                 operationResult = leftOperand
+            case "sin":
+                operationResult = Double(round(1000*sin(leftOperand * Double.pi/180))/1000)
+            case "cos":
+                operationResult = Double(round(1000*cos(leftOperand * Double.pi/180))/1000)
+            case "tan":
+                operationResult = Double(round(1000*tan(leftOperand * Double.pi/180))/1000)
+            case "√":
+                operationResult = sqrt(leftOperand)
             default:
                 ResultLabel.text! = "Wrong operation!!!"
         }
@@ -164,7 +181,7 @@ class ViewController: UIViewController
         } else {
             resultSubstr = resultStr
         }
-    
+    print(resultSubstr)
         ResultLabel.text! = resultSubstr
     }
 }
